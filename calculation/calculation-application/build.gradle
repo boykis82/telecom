@@ -1,0 +1,10 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    implementation project(':calculation:calculation-domain')
+    implementation project(':calculation:calculation-api')
+    implementation project(':calculation:calculation-port')
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-context'
+}

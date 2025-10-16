@@ -1,3 +1,10 @@
 
 rootProject.name = 'telecom-billing'
-include 'calculation', 'web-service', 'batch', 'testgen'
+include 'calculation:calculation-domain',
+        'calculation:calculation-api',
+        'calculation:calculation-port',
+        'calculation:calculation-application',
+        'calculation:calculation-infrastructure',
+        'web-service',
+        'batch',
+        'testgen'
