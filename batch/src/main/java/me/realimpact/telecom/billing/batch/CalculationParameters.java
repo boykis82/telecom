@@ -1,7 +1,7 @@
 package me.realimpact.telecom.billing.batch;
 
-import me.realimpact.telecom.calculation.api.BillingCalculationPeriod;
-import me.realimpact.telecom.calculation.api.BillingCalculationType;
+import me.realimpact.telecom.calculation.domain.BillingCalculationPeriod;
+import me.realimpact.telecom.calculation.domain.BillingCalculationType;
 import me.realimpact.telecom.calculation.domain.CalculationContext;
 
 import java.time.LocalDate;

@@ -1,4 +1,3 @@
-dependencies {
-    // In the root build.gradle, dependencies for domain module are already defined.
-    // This file can be used for domain-specific dependencies if needed in the future.
-}
+// Calculation parent module - aggregates all calculation submodules
+bootJar { enabled = false }
+jar { enabled = false }
