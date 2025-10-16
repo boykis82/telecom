@@ -40,12 +40,4 @@ public record CalculationTarget(
         return (List<T>) data;
     }
 
-    /**
-     * 기존 호환성을 위한 InstallationHistory 조회 메서드
-     * @return InstallationHistory 목록
-     */
-    public List<InstallationHistory> installationHistories() {
-        return getOneTimeChargeData(InstallationHistory.class);
-    }
-
 }
