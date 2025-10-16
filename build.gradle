@@ -39,7 +39,7 @@ subprojects {
     }
 }
 
-project(':domain') {
+project(':calculation') {
     bootJar { enabled = false }
     jar { enabled = true }
 
@@ -66,7 +66,7 @@ project(':web-service') {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-        implementation project(':domain')
+        implementation project(':calculation')
     }
 }
 
@@ -74,7 +74,7 @@ project(':batch') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-batch'
         implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
-        implementation project(':domain')
+        implementation project(':calculation')
         runtimeOnly 'com.mysql:mysql-connector-j'
     }
 }
