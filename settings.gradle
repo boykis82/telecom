@@ -5,6 +5,8 @@ include 'calculation:calculation-domain',
         'calculation:calculation-port',
         'calculation:calculation-application',
         'calculation:calculation-infrastructure',
+        'calculation:calculation-policy-onetimecharge',
+        'calculation:calculation-policy-monthlyfee',
         'web-service',
         'batch',
         'testgen'

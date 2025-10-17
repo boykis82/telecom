@@ -7,4 +7,8 @@ dependencies {
     implementation project(':calculation:calculation-port')
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework:spring-context'
+
+    // Policy modules needed for integration tests
+    testImplementation project(':calculation:calculation-policy-monthlyfee')
+    testImplementation project(':calculation:calculation-policy-onetimecharge')
 }

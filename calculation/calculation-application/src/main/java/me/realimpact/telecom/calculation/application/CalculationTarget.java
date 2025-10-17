@@ -1,11 +1,8 @@
 package me.realimpact.telecom.calculation.application;
 
 import me.realimpact.telecom.calculation.domain.discount.Discount;
-import me.realimpact.telecom.calculation.domain.monthlyfee.ContractWithProductsAndSuspensions;
 import me.realimpact.telecom.calculation.domain.monthlyfee.MonthlyChargeDomain;
 import me.realimpact.telecom.calculation.domain.onetimecharge.OneTimeChargeDomain;
-import me.realimpact.telecom.calculation.domain.onetimecharge.policy.installation.InstallationHistory;
-import me.realimpact.telecom.calculation.domain.onetimecharge.policy.installment.DeviceInstallmentMaster;
 
 import java.util.Collections;
 import java.util.List;
