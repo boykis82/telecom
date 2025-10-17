@@ -61,7 +61,7 @@ public class CalculationCommandService implements CalculationCommandUseCase {
                 ));
         this.monthlyFeeCalculators = monthlyFeeCalculators;
 
-        // OneTime Charge DataLoader List를 Map으로 변환
+        // OneTime Charge DataLoader List를 Map으로 변환. LinkedHashMap을 써서 Order 어노테이션의 순서를 보장한다.
         this.oneTimeChargeDataLoaderMap = oneTimeChargeDataLoaders.stream()
                 .collect(Collectors.toMap(
                         OneTimeChargeDataLoader::getDomainType,

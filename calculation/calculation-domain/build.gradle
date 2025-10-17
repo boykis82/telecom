@@ -10,5 +10,5 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
 
     // Policy modules needed for domain tests
-    testImplementation project(':calculation:calculation-policy-monthlyfee')
+    testImplementation project(':calculation-policy-monthlyfee')
 }
