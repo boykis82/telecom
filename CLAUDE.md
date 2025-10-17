@@ -29,12 +29,13 @@ For detailed information, please refer to:
 ./gradlew test
 
 # Run tests for specific module
-./gradlew :domain:test
+./gradlew :calculation:calculation-domain:test
+./gradlew :calculation-policy-monthlyfee:test
 ./gradlew :web-service:test
 ./gradlew :batch:test
 
 # Run a single test class
-./gradlew :domain:test --tests "MonthlyFeeCalculationIntegrationTest"
+./gradlew :calculation-policy-monthlyfee:test --tests "MonthlyFeeCalculationIntegrationTest"
 
 # Clean build
 ./gradlew clean build
@@ -66,32 +67,77 @@ The system includes comprehensive batch processing capabilities:
 ## Architecture
 
 ### Module Structure
-- **domain**: Core business logic with hexagonal architecture (library JAR module, bootJar disabled)
-  - Dependencies: Spring Data JPA, MyBatis, QueryDSL, MySQL Connector
-  - Contains: Business entities, use cases, application services, infrastructure adapters
-- **web-service**: REST API layer depending on domain
-  - Dependencies: Spring Web, SpringDoc OpenAPI, MyBatis, domain module
+
+The project follows a modular architecture with clear separation of concerns:
+
+#### Core Calculation Modules (Under `calculation/`)
+- **calculation-domain**: Core domain entities and business rules (library JAR module, bootJar disabled)
+  - Dependencies: Spring Validation, Jackson libraries
+  - Contains: Domain entities, value objects, core business logic
+- **calculation-api**: Inbound port definitions (use cases interfaces)
+  - Dependencies: calculation-domain
+  - Contains: Use case interfaces, request/response models
+- **calculation-port**: Outbound port definitions
+  - Dependencies: calculation-domain
+  - Contains: Repository interfaces, external service ports
+- **calculation-application**: Application service layer
+  - Dependencies: calculation-domain, calculation-api, calculation-port
+  - Contains: Use case implementations, orchestration services, calculators
+- **calculation-infrastructure**: Infrastructure adapters
+  - Dependencies: calculation-domain, calculation-port, MyBatis, MySQL Connector
+  - Contains: Repository implementations, MyBatis mappers, DTO converters
+
+#### Policy Modules (Top-level, Independent)
+- **calculation-policy-monthlyfee**: Monthly fee calculation policy implementations
+  - Dependencies: calculation-domain, calculation-application
+  - Contains: Monthly fee calculators, pricing policies, data loaders, MyBatis mappers for contract/product data
+  - Location: `/calculation-policy-monthlyfee` (independent module)
+- **calculation-policy-onetimecharge**: One-time charge policy implementations
+  - Dependencies: calculation-domain, calculation-application
+  - Contains: Installation fee calculator, device installment calculator, data loaders, MyBatis mappers
+  - Location: `/calculation-policy-onetimecharge` (independent module)
+
+#### Application Modules
+- **web-service**: REST API layer
+  - Dependencies: All calculation modules, policy modules, Spring Web, SpringDoc OpenAPI
   - Database: MySQL for production, H2 in-memory for testing/development
   - Features: REST API endpoints, Swagger documentation, global exception handling
-- **batch**: Spring Batch processing layer depending on domain for large-scale calculations
-  - Dependencies: Spring Batch, MyBatis, domain module, MySQL Connector
+- **batch**: Spring Batch processing layer
+  - Dependencies: All calculation modules, policy modules, Spring Batch, MyBatis
   - Features: Multi-threaded processing, chunk-based processing, MySQL connection pooling
-- **testgen**: Test data generation utility with JavaFaker
+- **testgen**: Test data generation utility
   - Dependencies: Spring Boot Starter, MyBatis, MySQL Connector, JavaFaker
   - Purpose: Generate realistic test data for development and testing
 
 ### Hexagonal Architecture
-The domain module follows strict hexagonal architecture with clear package structure:
-- `api/`: Inbound ports (use cases) - `CalculationCommandUseCase`
-- `application/`: Application services implementing use cases - `CalculationCommandService`, calculators
-  - `monthlyfee/`: Monthly fee calculation components - `BaseFeeCalculator`, `ProratedPeriodBuilder`
-  - `onetimecharge/`: One-time charge calculators - `InstallationFeeCalculator`, `DeviceInstallmentCalculator`
-- `domain/`: Core business entities and logic - `ContractWithProductsAndSuspensions`, policies, pricing models
-- `infrastructure/`: Adapters and external integrations
-  - `adapter/`: Repository implementations with separate `mybatis/` subpackage
-  - `dto/`: Data transfer objects with converter classes
-  - `converter/`: Domain-DTO conversion logic - `ContractDtoToDomainConverter`, `OneTimeChargeDtoConverter`
-- `port/out/`: Outbound ports for external dependencies - `CalculationResultSavePort`, `ProductQueryPort`, `InstallationHistoryQueryPort`, `DeviceInstallmentQueryPort`
+
+The calculation modules follow strict hexagonal architecture with clear layer separation:
+
+**Core Layers (calculation-domain, calculation-api, calculation-port):**
+- `calculation-api`: Inbound ports (use cases) - `CalculationCommandUseCase`
+- `calculation-domain`: Core business entities - `CalculationResult`, `CalculationContext`, domain value objects
+- `calculation-port`: Outbound ports - `CalculationResultSavePort`, `ProductQueryPort`, etc.
+
+**Application Layer (calculation-application):**
+- Application services implementing use cases - `CalculationCommandService`
+- Calculator orchestration and coordination
+- Discount and VAT calculation services
+
+**Infrastructure Layer (calculation-infrastructure):**
+- Repository implementations with MyBatis integration
+- DTO converters and data transformation logic
+- Adapter implementations for outbound ports
+
+**Policy Layer (Independent Modules):**
+- `calculation-policy-monthlyfee`:
+  - Monthly fee calculators - `BasicPolicyMonthlyFeeCalculator`
+  - Data loaders - `ContractWithProductsAndSuspensionsDataLoader`
+  - Pricing policies - `FlatRatePolicy`, `TierFactorPolicy`, etc.
+  - MyBatis mappers for contract/product queries
+- `calculation-policy-onetimecharge`:
+  - One-time charge calculators - `InstallationFeeCalculator`, `DeviceInstallmentCalculator`
+  - Data loaders - `InstallationHistoryDataLoader`, `DeviceInstallmentMasterDataLoader`
+  - MyBatis mappers for installation/installment data
 
 ### Key Business Components
 
@@ -467,6 +513,52 @@ private <T> void processAndAddResults(
 
 ## Recent Major Changes (2024-2025)
 
+### Module Structure Refactoring (October 2025)
+Completed module reorganization to improve separation of concerns and policy independence:
+
+**Module Restructuring:**
+```
+# Before
+telecom/
+└── calculation/
+    ├── calculation-domain
+    ├── calculation-api
+    ├── calculation-port
+    ├── calculation-application
+    ├── calculation-infrastructure
+    ├── calculation-policy-monthlyfee       # Under calculation/
+    └── calculation-policy-onetimecharge    # Under calculation/
+
+# After
+telecom/
+├── calculation/
+│   ├── calculation-domain
+│   ├── calculation-api
+│   ├── calculation-port
+│   ├── calculation-application
+│   └── calculation-infrastructure
+├── calculation-policy-monthlyfee           # Top-level independent module
+└── calculation-policy-onetimecharge        # Top-level independent module
+```
+
+**Rationale:**
+- **Policy Independence**: Policy modules are now independent, not nested under core calculation modules
+- **Clear Separation**: Core calculation framework (`calculation/*`) vs. policy implementations (top-level)
+- **Extensibility**: Easier to add new policy modules without touching core calculation structure
+- **Gradle Organization**: Simplified dependency management with top-level policy modules
+
+**Modified Files:**
+- `settings.gradle`: Updated module paths from `calculation:calculation-policy-*` to `calculation-policy-*`
+- `build.gradle`: Updated all project references in web-service, batch dependencies
+- `calculation-application/build.gradle`: Updated testImplementation references
+- `calculation-domain/build.gradle`: Updated testImplementation references
+
+**Impact:**
+- No package structure changes (still `me.realimpact.telecom.calculation.policy.*`)
+- No source code modifications required
+- All tests pass successfully
+- Git history preserved using `git mv`
+
 ### ChargeItem Refactoring
 Completed major refactoring from MonthlyChargeItem to ChargeItem with revenue tracking:
 
@@ -626,16 +718,31 @@ public class MaintenanceFeeCalculator implements OneTimeChargeCalculator<Mainten
 
 ### Multi-Module MyBatis Setup
 
-**Domain Module Configuration:**
-- Contains all MyBatis Mapper XML files in `src/main/resources/mapper/`
-- Provides MyBatis configuration in `application.yml`
-- Type aliases package: `me.realimpact.telecom.calculation.infrastructure.dto`
+The MyBatis mappers are distributed across multiple modules:
+
+**Infrastructure Module (calculation-infrastructure):**
+- Core MyBatis mappers in `src/main/resources/mapper/`
+- Common infrastructure DTOs and converters
+- Calculation result persistence
+
+**Policy Modules:**
+- **calculation-policy-monthlyfee**: Contains mappers for contract/product queries
+  - `ProductQueryMapper.xml`, `PreviewProductQueryMapper.xml`
+  - Package: `me.realimpact.telecom.calculation.policy.monthlyfee.adapter.mybatis`
+- **calculation-policy-onetimecharge**: Contains mappers for one-time charge data
+  - `InstallationHistoryMapper.xml`, `DeviceInstallmentMapper.xml`
+  - Package: `me.realimpact.telecom.calculation.policy.onetimecharge.adapter.mybatis`
 
 **Web Service Module Configuration:**
-- Uses `@MapperScan("me.realimpact.telecom.calculation.infrastructure.adapter.mybatis")`
-- Inherits domain module MyBatis configuration via dependency
+- Uses `@MapperScan` to scan all mapper packages:
+  - Core infrastructure mappers
+  - Policy module mappers
 - MySQL connection with HikariCP optimization for production
 - H2 in-memory database for development/testing
+
+**Batch Module Configuration:**
+- Same mapper scanning configuration as web-service
+- Optimized MyBatis settings for batch processing (fetch size: 100, cache disabled)
 
 ## Web Service Development Guidelines
 

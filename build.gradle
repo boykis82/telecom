@@ -54,8 +54,8 @@ project(':web-service') {
         implementation project(':calculation:calculation-infrastructure')
 
         // Policy modules (runtime implementation)
-        implementation project(':calculation:calculation-policy-onetimecharge')
-        implementation project(':calculation:calculation-policy-monthlyfee')
+        implementation project(':calculation-policy-onetimecharge')
+        implementation project(':calculation-policy-monthlyfee')
     }
 }
 
@@ -72,8 +72,8 @@ project(':batch') {
         implementation project(':calculation:calculation-infrastructure')
 
         // Policy modules (runtime implementation)
-        implementation project(':calculation:calculation-policy-onetimecharge')
-        implementation project(':calculation:calculation-policy-monthlyfee')
+        implementation project(':calculation-policy-onetimecharge')
+        implementation project(':calculation-policy-monthlyfee')
 
         runtimeOnly 'com.mysql:mysql-connector-j'
     }

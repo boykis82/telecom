@@ -9,6 +9,6 @@ dependencies {
     implementation 'org.springframework:spring-context'
 
     // Policy modules needed for integration tests
-    testImplementation project(':calculation:calculation-policy-monthlyfee')
-    testImplementation project(':calculation:calculation-policy-onetimecharge')
+    testImplementation project(':calculation-policy-monthlyfee')
+    testImplementation project(':calculation-policy-onetimecharge')
 }
