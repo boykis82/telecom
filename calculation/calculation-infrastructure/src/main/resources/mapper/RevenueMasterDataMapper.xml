@@ -3,7 +3,7 @@
 
 <mapper namespace="me.realimpact.telecom.calculation.infrastructure.adapter.mybatis.RevenueMasterDataMapper">
 
-    <resultMap id="revenueMasterDataResult" type="RevenueMasterDataDto">
+    <resultMap id="revenueMasterDataResult" type="me.realimpact.telecom.calculation.infrastructure.dto.RevenueMasterDataDto">
         <!-- Primary Key -->
         <id property="revenueItemId" column="revenue_item_id"/>
         <id property="effectiveEndDate" column="effective_end_date"/>

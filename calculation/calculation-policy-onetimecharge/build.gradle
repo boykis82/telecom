@@ -1,0 +1,23 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 핵심 도메인 (마커 인터페이스만)
+    implementation project(':calculation:calculation-domain')
+
+    // Application 인터페이스 (Calculator, DataLoader)
+    implementation project(':calculation:calculation-application')
+
+    // calculation-port 제거 (자체 port 포함)
+
+    // Infrastructure 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Spring
+    implementation 'org.springframework:spring-context'
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+    implementation 'org.slf4j:slf4j-api'
+}
