@@ -21,6 +21,8 @@ For detailed information, please refer to:
 ## Development Commands
 
 ### Build and Test
+
+**Unix/Linux/macOS:**
 ```bash
 # Build all modules
 ./gradlew build
@@ -41,7 +43,30 @@ For detailed information, please refer to:
 ./gradlew clean build
 ```
 
+**Windows:**
+```batch
+REM Build all modules
+gradlew.bat build
+
+REM Run tests
+gradlew.bat test
+
+REM Run tests for specific module
+gradlew.bat :calculation:calculation-domain:test
+gradlew.bat :calculation-policy-monthlyfee:test
+gradlew.bat :web-service:test
+gradlew.bat :batch:test
+
+REM Run a single test class
+gradlew.bat :calculation-policy-monthlyfee:test --tests "MonthlyFeeCalculationIntegrationTest"
+
+REM Clean build
+gradlew.bat clean build
+```
+
 ### Development
+
+**Unix/Linux/macOS:**
 ```bash
 # Run web service
 ./gradlew :web-service:bootRun
@@ -57,12 +82,42 @@ For detailed information, please refer to:
 java -jar batch/build/libs/batch-0.0.1-SNAPSHOT.jar --billingStartDate=2024-03-01 --billingEndDate=2024-03-31
 ```
 
+**Windows:**
+```batch
+REM Run web service
+gradlew.bat :web-service:bootRun
+
+REM Run batch application
+gradlew.bat :batch:bootRun
+
+REM Run batch with parameters (example)
+gradlew.bat :batch:bootRun --args="--billingStartDate=2024-03-01 --billingEndDate=2024-03-31"
+
+REM Build and run batch JAR
+gradlew.bat :batch:bootJar
+java -jar batch\build\libs\batch-0.0.1-SNAPSHOT.jar --billingStartDate=2024-03-01 --billingEndDate=2024-03-31
+```
+
 ### Batch Execution
-The system includes comprehensive batch processing capabilities:
-- Use `./run-batch-jar.sh` for interactive batch execution
+
+The system includes comprehensive batch processing capabilities with cross-platform support:
+
+**Unix/Linux/macOS:**
+- `./run-batch-jar.sh` - Interactive thread pool batch execution
+- `./run-partitioned-batch-jar.sh` - Interactive partitioner batch execution
+- `./run-testgen.sh [options] <count>` - Test data generation
+
+**Windows:**
+- `run-batch-jar.bat` - Interactive thread pool batch execution
+- `run-partitioned-batch-jar.bat` - Interactive partitioner batch execution
+- `run-testgen.bat [options] <count>` - Test data generation
+
+**Features:**
+- Full contract processing and single contract processing via `contractId` parameter
+- One-time charge processing for installation fees and device installments
+- Interactive parameter input with default values
+- Configurable thread count for parallel processing
 - For full batch processing guide, see `BATCH_EXECUTION_GUIDE.md`
-- Supports both full contract processing and single contract processing via `contractId` parameter
-- Includes one-time charge processing for installation fees and device installments
 
 ## Architecture
 
