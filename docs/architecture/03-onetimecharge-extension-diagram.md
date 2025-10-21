@@ -2,6 +2,11 @@
 
 Spring DI를 활용한 제로 코드 확장 아키텍처를 보여주는 다이어그램입니다.
 
+> **Note**:
+> - 전체 모듈 구조는 [Module Dependency Diagram](./00-module-dependency-diagram.md)를 참고하세요.
+> - OneTimeCharge 관련 코드는 `calculation-policy-onetimecharge` 모듈에 위치합니다.
+> - MonthlyFee도 동일한 패턴을 사용하며 `calculation-policy-monthlyfee` 모듈에 위치합니다.
+
 ```mermaid
 classDiagram
     %% OneTimeCharge 확장 가능한 구조

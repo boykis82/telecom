@@ -2,6 +2,8 @@
 
 전체 시스템의 클래스 구조와 의존성 관계를 보여주는 다이어그램입니다.
 
+> **Note**: 모듈 간 의존성 관계는 [Module Dependency Diagram](./00-module-dependency-diagram.md)를 참고하세요.
+
 ```mermaid
 classDiagram
     %% API Layer

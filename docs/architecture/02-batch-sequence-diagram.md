@@ -2,6 +2,16 @@
 
 배치 처리 과정의 전체 플로우를 시간 순서대로 보여주는 다이어그램입니다.
 
+> **Note**: 전체 모듈 구조는 [Module Dependency Diagram](./00-module-dependency-diagram.md)를 참고하세요.
+
+## Batch Processing Architecture
+
+현재 시스템은 두 가지 배치 처리 아키텍처를 지원합니다:
+- **Thread Pool Architecture**: `monthlyFeeCalculationJob` (동적 작업 분배)
+- **Partitioner Architecture**: `partitionedMonthlyFeeCalculationJob` (정적 파티션 분할)
+
+아래 다이어그램은 Thread Pool 방식의 배치 처리 흐름을 나타냅니다.
+
 ```mermaid
 sequenceDiagram
     participant CLI as BatchCommandLineRunner
