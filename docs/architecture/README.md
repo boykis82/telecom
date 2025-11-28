@@ -85,7 +85,7 @@ VAT 계산 (VatCalculator)
 - `fee`와 `balance` 자동 합계 계산
 - 분산된 계산 결과의 통합 처리
 
-### Spring Boot 3 & Java 21 적용
+### Spring Boot 3 & Java 25 적용
 - Jakarta EE 마이그레이션 완료
 - Record 패턴 적극 활용 (`CalculationTarget`, `CalculationParameters`)
 - Stream API와 함수형 프로그래밍

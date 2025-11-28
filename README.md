@@ -5,7 +5,7 @@ Spring Boot 3 기반 통신사 요금 계산 시스템 - 한국 통신 서비스
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Java 21 or higher
+- Java 25 or higher
 - MySQL 8.0 or higher (optional: Docker)
 - Git
 
@@ -62,8 +62,8 @@ telecom/
 
 ## 🛠️ Technology Stack
 
-- **Java 21** - Modern Java features with records and pattern matching
-- **Spring Boot 3.2.4** - Application framework
+- **Java 25** - Modern Java features with records and pattern matching
+- **Spring Boot 3.5.8** - Application framework
 - **Spring Batch** - Large-scale batch processing
 - **MyBatis 3.0.3** - SQL mapping framework
 - **MySQL 8.0** - Primary database

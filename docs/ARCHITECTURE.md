@@ -44,7 +44,7 @@ The domain module follows strict hexagonal architecture with clear package struc
 ## Technology Stack
 
 ### Core Technologies
-- **Spring Boot 3.2.4** with **Java 21**
+- **Spring Boot 3.2.4** with **Java 25**
 - **JPA with QueryDSL 5.0.0** for domain entity queries
 - **MyBatis 3.0.3** for complex SQL queries and batch processing with cursor-based reading
 - **Spring Batch** for large-scale multi-threaded data processing
